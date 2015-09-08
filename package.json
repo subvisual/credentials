@@ -1,0 +1,16 @@
+{
+  "name": "credentials",
+  "version": "1.0.0",
+  "description": "Generate credentials for RubyConfPT",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "João Justo",
+  "license": "ISC",
+  "dependencies": {
+    "gm": "^1.18.1",
+    "pngjs": "^0.4.0",
+    "pngjs-draw": "0.0.6"
+  }
+}
