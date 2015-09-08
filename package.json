@@ -9,6 +9,7 @@
   "author": "João Justo",
   "license": "ISC",
   "dependencies": {
+    "csv-parser": "^1.7.0",
     "gm": "^1.18.1"
   }
 }
