@@ -1,3 +1,4 @@
-/node_modules
 *.png
+*.csv
 /output
+/node_modules
