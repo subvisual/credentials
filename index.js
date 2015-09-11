@@ -2,9 +2,13 @@ var fs = require('fs');
 var gm = require('gm');
 var csv = require('csv-parser');
 
-var fontSize = '70';
+var fontSize = 70;
 var outputPath = './output/';
-var template = './images/template.jpg';
+
+var staffTemplate = './images/staff.png';
+var speakerTemplate = './images/speaker.png';
+var attendeTemplate = './images/attende.png';
+
 var color = { blue: '#50ABF1', black: '#414141' };
 
 var futura = './fonts/futura.ttf';
@@ -28,11 +32,11 @@ function onEnd(error) {
   }
 }
 
-function draw(person) {
-  var fileName = person.firstName + '_' + person.id + '.jpg';
+function draw(template, outputFolder, person) {
+  var fileName = person.firstName + '_' + person.id + '.png';
 
   gm(template)
-    .fontSize(70)
+    .fontSize(fontSize)
     .fill(color.black)
     .font(futuraBold)
     .drawText(0, -50, person.firstName, 'Center')
@@ -41,7 +45,7 @@ function draw(person) {
     .font(garamondBold)
     .fill(color.blue)
     .drawText(0, 180, person.twitter, 'Center')
-    .write(outputPath + fileName, onEnd);
+    .write(outputPath + outputFolder + '/' + fileName, onEnd);
 }
 
 function cleanTwitter(person) {
@@ -54,15 +58,15 @@ function cleanTwitter(person) {
   return person;
 }
 
-function createCredential(credentials) {
+function createCredential(template, outputFolder, credentials) {
   credentials = credentials.map(cleanTwitter);
-  credentials.forEach(draw);
+  credentials.forEach(draw.curry(template, outputFolder));
 }
 
-function createCredentialsFromFile() {
+function createCredentialsFromFile(template, file, outputFolder) {
   var credentials = [];
 
-  fs.createReadStream('./attendes.csv')
+  fs.createReadStream(file)
     .pipe(csv({
       strict: true,
       separator: ';',
@@ -71,7 +75,9 @@ function createCredentialsFromFile() {
     .on('data', function(data) { //don't know why I cannot simply call like this: .on('data' credentials.push)
       credentials.push(data);
     })
-    .on('end', createCredential.curry(credentials));
+    .on('end', createCredential.curry(template, outputFolder, credentials));
 }
 
-createCredentialsFromFile();
+// createCredentialsFromFile(staffTemplate, './staff.csv', 'staff');
+// createCredentialsFromFile(speakerTemplate, './speakers.csv', 'speakers');
+createCredentialsFromFile(attendeTemplate, './attendes.csv', 'attendes');
