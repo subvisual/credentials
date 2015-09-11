@@ -68,7 +68,6 @@ function createCredentialsFromFile(template, file, outputFolder) {
 
   fs.createReadStream(file)
     .pipe(csv({
-      strict: true,
       separator: ';',
       headers: ['id', 'firstName', 'lastName', 'twitter']
     }))
