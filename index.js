@@ -2,18 +2,36 @@ var fs = require('fs');
 var gm = require('gm');
 var csv = require('csv-parser');
 
-var fontSize = 70;
+var fontSize = 100;
+var fontSizeStaff = 120;
+var fontSizeSpeaker = 120;
 var outputPath = './output/';
 
-var staffTemplate = './images/staff.png';
-var speakerTemplate = './images/speaker.png';
-var attendeTemplate = './images/attende.png';
+var attendePostion = {
+  firstName: { x: 100, y: 550 },
+  lastName:  { x: 100, y: 650 }
+}
 
-var color = { blue: '#50ABF1', black: '#414141' };
+var speakerPostion = {
+  firstName: { x: 150, y: 610 },
+  lastName:  { x: 150, y: 760 }
+}
+
+var staffPostion = {
+  firstName: { x: 150, y: 610 },
+  lastName:  { x: 150, y: 760 }
+}
+
+var staffTemplate = './images/staff.jpg';
+var speakerTemplate = './images/speaker.jpg';
+var attendeTemplate = './images/attende.jpg';
+
+var color = { blue: '#50ABF1', black: '#414141', white: '#ffffff', pink: '#d42d4f' };
 
 var futura = './fonts/futura.ttf';
 var futuraBold = './fonts/futura_bold.ttf';
 var garamondBold = './fonts/garamond_bold.ttf';
+var montserratBold = './fonts/Montserrat-Bold.ttf';
 
 Function.prototype.curry = function() {
     if (arguments.length < 1) {
@@ -33,18 +51,14 @@ function onEnd(error) {
 }
 
 function draw(template, outputFolder, person) {
-  var fileName = person.firstName + '_' + person.id + '.png';
+  var fileName = person.firstName + '_' + person.id + '.jpg';
 
   gm(template)
-    .fontSize(fontSize)
+    .fontSize(fontSizeStaff)
     .fill(color.black)
-    .font(futuraBold)
-    .drawText(0, -50, person.firstName, 'Center')
-    .font(futura)
-    .drawText(0, 50, person.lastName, 'Center')
-    .font(garamondBold)
-    .fill(color.blue)
-    .drawText(0, 180, person.twitter, 'Center')
+    .font(montserratBold)
+    .drawText(staffPostion.firstName.x, staffPostion.firstName.y, person.firstName.toUpperCase(), 'Left')
+    .drawText(staffPostion.lastName.x, staffPostion.lastName.y, person.lastName.toUpperCase(), 'Left')
     .write(outputPath + outputFolder + '/' + fileName, onEnd);
 }
 
@@ -77,6 +91,6 @@ function createCredentialsFromFile(template, file, outputFolder) {
     .on('end', createCredential.curry(template, outputFolder, credentials));
 }
 
-// createCredentialsFromFile(staffTemplate, './staff.csv', 'staff');
+createCredentialsFromFile(staffTemplate, './staff.csv', 'staff');
 // createCredentialsFromFile(speakerTemplate, './speakers.csv', 'speakers');
-createCredentialsFromFile(attendeTemplate, './attendes.csv', 'attendes');
+// createCredentialsFromFile(attendeTemplate, './attendes.csv', 'attendes');
